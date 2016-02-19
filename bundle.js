@@ -3021,7 +3021,7 @@ var map = new mapboxgl.Map({
   zoom: 10
 });
 
-var dataUrl = '/assets/hydrants.geojson';
+var dataUrl = 'assets/hydrants.geojson';
 
 var hydrants = new mapboxgl.GeoJSONSource({
   data: dataUrl
