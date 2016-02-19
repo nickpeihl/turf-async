@@ -1,7 +1,6 @@
 var work = require('webworkify');
 var mapboxgl = require('mapbox-gl');
 var concave = require('turf-concave');
-var http = require('http-browserify');
 var geojsonhint = require('geojsonhint');
 
 var w = work(require('./worker.js'));
