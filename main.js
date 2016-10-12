@@ -1,16 +1,14 @@
 var work = require('webworkify');
 var mapboxgl = require('mapbox-gl');
-var concave = require('turf-concave');
+var concave = require('@turf/concave');
 var geojsonhint = require('geojsonhint');
 var geobuf = require('geobuf');
 var Pbf = require('pbf');
 
 var w = work(require('./worker.js'));
 w.addEventListener('message', function(ev) {
-    console.log(ev.data);
-    var gj = geobuf.decode(ev.data[1]);
-    console.log(gj);
-    turfResult.setData(gj);
+    var gj = geobuf.decode(new Pbf(ev.data[1]));
+    map.getSource('results').setData(gj);
 
 });
 w.addEventListener('error', function(err) {
@@ -26,22 +24,27 @@ var map = new mapboxgl.Map({
     zoom: 10
 });
 
+var emptyGeoJson = {
+  type: 'FeatureCollection',
+  features: []
+};
+
 var dataUrl = 'assets/hydrants.geojson';
-
-var hydrants = new mapboxgl.GeoJSONSource({
-    data: dataUrl
-});
-
-var turfResult = new mapboxgl.GeoJSONSource({});
 
 map.on('style.load', function() {
     console.log('style loaded');
-    map.addSource('points', hydrants);
+    map.addSource('points', {
+      type: 'geojson',
+      data: dataUrl
+    });
 
-    map.addSource('results', turfResult);
+    map.addSource('results', {
+      type: 'geojson',
+      data: emptyGeoJson
+    });
 
     map.addLayer({
-        'id': 'hydrants',
+        'id': 'points',
         'type': 'circle',
         'source': 'points'
     });
@@ -90,9 +93,9 @@ function addButton(name, id) {
 
 
 function turfSync() {
-    turfResult.setData('');
+    map.getSource('results').setData(emptyGeoJson);
     var absUrl = window.location + dataUrl;
-    makeRequest(absUrl);
+    makeRequest(dataUrl);
 }
 
 function makeRequest(url) {
@@ -117,12 +120,12 @@ function transferFailed() {
 }
 
 function turfIt(data) {
-    var results = concave(JSON.parse(data), 1, 'miles');
-    turfResult.setData(results);
+    var results = concave(JSON.parse(data), 0.75, 'miles');
+    map.getSource('results').setData(results);
 }
 
 function turfAsync() {
-    turfResult.setData('');
+    map.getSource('results').setData(emptyGeoJson);
     var absUrl = window.location + dataUrl;
     w.postMessage([absUrl]);
 }

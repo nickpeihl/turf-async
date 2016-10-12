@@ -1,9 +1,7 @@
-var concave = require('turf-concave');
+var concave = require('@turf/concave');
 var geojsonhint = require('geojsonhint');
 var geobuf = require('geobuf');
 var Pbf = require('pbf');
-
-debugger;
 
 module.exports = function(self) {
     self.addEventListener('message', function(ev) {
@@ -33,16 +31,8 @@ module.exports = function(self) {
     };
 
     self.turfIt = function(data) {
-        var results = concave(JSON.parse(data), 1, 'miles');
-        var pbf = new Pbf(geobuf.encode(results, new Pbf()));
-        /* The pbf does not contain the readFields method when called via
-         the web worker. However, I can set a breakpoint on the line below,
-         then rewrite the above line using a different variable (e.g. pbf2).
-         The pbf2 variable does contain the readFields method. I believe this
-         is due to the scope of the pbf buffer existing in the browser, but not
-         in the web worker. Possibly releated to this issue
-         (https://github.com/substack/webworkify/issues/14).
-        */
-        self.postMessage(['Done', pbf]);
+        var results = concave(JSON.parse(data), 0.75, 'miles');
+        var buf = geobuf.encode(results, new Pbf());
+        self.postMessage(['Done', buf]);
     };
 };
