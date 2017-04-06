@@ -11,7 +11,7 @@
   "author": "Nick Peihl <nickpeihl@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "@turf/concave": "^3.5.2",
+    "@turf/concave": "^4.0.2",
     "geobuf": "^3.0.0",
     "geojsonhint": "^2.0.0",
     "mapbox-gl": "^0.31.0",
