@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@turf/concave": "^3.5.2",
-    "geobuf": "^3.0.0",
+    "geobuf": "^3.0.1",
     "geojsonhint": "^2.0.0",
     "mapbox-gl": "^0.31.0",
     "pbf": "^3.0.2",
