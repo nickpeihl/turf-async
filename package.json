@@ -14,7 +14,7 @@
     "@turf/concave": "^3.5.2",
     "geobuf": "^3.0.0",
     "geojsonhint": "^2.0.0",
-    "mapbox-gl": "^0.31.0",
+    "mapbox-gl": "^1.1.1",
     "pbf": "^3.0.2",
     "webworkify": "^1.4.0"
   },
